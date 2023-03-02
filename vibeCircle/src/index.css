@@ -1,3 +1,16 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  user-select: none;
+  padding: 0;
+}
+body {
+  overflow: scroll;
+  height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  /* background-color: #f4f4f4; */
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
