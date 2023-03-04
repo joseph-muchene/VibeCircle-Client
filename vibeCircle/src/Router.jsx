@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
+import Account from "./pages/Account";
 function Router() {
   return (
     <div>
@@ -15,6 +16,7 @@ function Router() {
           <Route element={<Blog />} path="/blog" />
           <Route element={<Register />} path="/register" />
           <Route element={<Login />} path="/login" />
+          <Route element={<Account />} path="/account" />
           <Route element={<Settings />} path="/settings" />
           <Route element={<Friends />} path="/friends" />
         </Routes>
