@@ -1,10 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Friends from "./Friends";
 import Navbar from "../core/Navbar";
 import Search from "../components/Search";
-
+import { useSelector, useDispatch } from "react-redux";
+import { getUserById, updateUser } from "../features/Auth/AuthSlice";
 function Settings() {
+  const { user } = useSelector((state) => state.user);
+
   const [toggle, setToggle] = useState(false);
+  const [firstName, setFirstName] = useState(user?.name?.split(" ")[0]);
+  const [secondName, setSecondName] = useState(user?.name?.split(" ")[1]);
+  const [email, setEmail] = useState(user?.email);
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      name: firstName + " " + secondName,
+      email,
+      password,
+    };
+    const payload = {
+      id: user._id,
+      data,
+    };
+
+    dispatch(updateUser(payload));
+  };
+
+  window.localStorage.setItem("auth", JSON.stringify(user && user));
+
   return (
     <div>
       <Navbar />
@@ -16,11 +43,13 @@ function Settings() {
           <div>
             <div className="md:mt-[4rem] ">
               <h1 className="text-center my-3 text-xl">Update Profile</h1>
-              <form>
+              <form onSubmit={onSubmit}>
                 <div>
                   <label htmlFor="firstName">First Name</label>
                   <input
                     type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline:none focus:shadow-outline"
                     name="firstName"
                   />
@@ -30,8 +59,10 @@ function Settings() {
                   <label htmlFor="secondName">Second Name</label>
                   <input
                     type="text"
+                    value={secondName}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline:none focus:shadow-outline"
                     name="secondName"
+                    onChange={(e) => setSecondName(e.target.value)}
                   />
                 </div>
 
@@ -39,6 +70,8 @@ function Settings() {
                   <label htmlFor="email">Email</label>
                   <input
                     type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline:none focus:shadow-outline"
                     name="email"
                   />
@@ -46,9 +79,11 @@ function Settings() {
                 <div>
                   <label htmlFor="password">Password</label>
                   <input
-                    type="text"
+                    type="password"
+                    value={password}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline:none focus:shadow-outline"
                     name="password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 

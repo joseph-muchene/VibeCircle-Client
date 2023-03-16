@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
+import { onLogout } from "../features/Auth/AuthSlice";
+import { useDispatch } from "react-redux";
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const removeUserFromAuthSession = () => {
+    navigate("/login");
+    return dispatch(onLogout());
+  };
   return (
     <div className="mb-4 mx-0 bg-slate-800 flex flex-col justify-between px-4 py-5 items-center md:mx-10 md:flex-row">
       <ul className="flex items-center relative">
@@ -39,7 +47,10 @@ function Navbar() {
               <Link to="/blog">Chat</Link>
             </li>
             <li>
-              <button className="rounded-md items-center bg-white text-black px-4 py-1.5 hover:bg-red-600 hover:text-white hover:animate-pulse transition-all ">
+              <button
+                onClick={removeUserFromAuthSession}
+                className="rounded-md items-center bg-white text-black px-4 py-1.5 hover:bg-red-600 hover:text-white hover:animate-pulse transition-all "
+              >
                 logout
               </button>
             </li>

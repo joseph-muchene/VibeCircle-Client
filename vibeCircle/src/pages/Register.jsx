@@ -1,12 +1,42 @@
 import React, { useState } from "react";
 import Navbar from "../core/Navbar";
 import { Link } from "react-router-dom";
-
+import { SignUpUser, reset } from "../features/Auth/AuthSlice";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 function Register() {
+  const navigate = useNavigate();
+  const { message, isSuccess, authenticated, isError } = useSelector(
+    (state) => state.user
+  );
+  const dispatch = useDispatch();
+
   const [firstName, setFirstName] = useState("");
   const [password, setPasword] = useState("");
   const [email, setEmail] = useState("");
   const [secondName, setSecondName] = useState("");
+
+  const submitUserData = (e) => {
+    e.preventDefault();
+    try {
+      const userData = {
+        username: firstName + " " + secondName,
+        email,
+        password,
+      };
+
+      dispatch(SignUpUser(userData));
+      if (isSuccess && !isError) {
+        return navigate("/login");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  !message === " " && alert(message);
+
   return (
     <div>
       <Navbar />
@@ -22,12 +52,13 @@ function Register() {
         </div>
 
         <div className="mt-4">
-          <form>
+          <form onSubmit={submitUserData}>
             <div>
               <label htmlFor="firstName">First Name</label>
               <input
                 type="text"
                 value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline:none focus:shadow-outline"
                 name="firstName"
               />
@@ -40,6 +71,7 @@ function Register() {
                 value={secondName}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline:none focus:shadow-outline"
                 name="secondName"
+                onChange={(e) => setSecondName(e.target.value)}
               />
             </div>
 
@@ -50,6 +82,7 @@ function Register() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline:none focus:shadow-outline"
                 value={email}
                 name="email"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
@@ -59,11 +92,15 @@ function Register() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline:none focus:shadow-outline"
                 value={password}
                 name="password"
+                onChange={(e) => setPasword(e.target.value)}
               />
             </div>
 
             <div className="flex justify-center my-4">
-              <button className="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:outline-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
+              <button
+                type="submit"
+                className="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:outline-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+              >
                 Create Account
               </button>
             </div>

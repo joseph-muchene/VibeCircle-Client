@@ -2,7 +2,9 @@ import React from "react";
 import Navbar from "../core/Navbar";
 import Pic from "../soon.jpeg";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 function Account() {
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const onNavigate = () => {
@@ -23,19 +25,19 @@ function Account() {
           />
         </div>
 
-        <p className="my-3">Name: Joseph Muchene</p>
+        <p className="my-3">Name: {user?.name}</p>
         <div className="flex flex-row space-x-4 my-4  ">
           <p className="text-center">
             Followers:{" "}
             <span className=" bg-red-400 p-2 rounded-full text-center">
-              234
+              {user?.followers?.length}
             </span>
           </p>
 
           <p className="text-center">
             Following:{" "}
             <span className=" bg-green-600 p-2 rounded-full text-center">
-              10
+              {user?.followings?.length}
             </span>
           </p>
         </div>
