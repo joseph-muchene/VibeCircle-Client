@@ -7,6 +7,7 @@ const AuthState = {
   isLoading: false,
   authenticated: false,
   token: "",
+  users: [],
   isSuccess: false,
   message: "",
   isError: false,
@@ -28,6 +29,17 @@ export const getUserById = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       return userServiceData.getUserById(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const findAllUsers = createAsyncThunk(
+  "/auth/users",
+  async (_, thunkAPI) => {
+    try {
+      return userServiceData.findAllUsers();
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -131,7 +143,7 @@ export const userSlice = createSlice({
         state.user = action.payload;
         state.isSuccess = true;
         state.isError = false;
-
+        state.isLoading = false;
         state.message = "";
         state.authenticated = true;
       })
@@ -151,6 +163,20 @@ export const userSlice = createSlice({
       })
       .addCase(updateUser.rejected, (state) => {
         state.message = "An error has occured, try updating again";
+        state.isLoading = false;
+        state.isError = true;
+      })
+      .addCase(findAllUsers.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(findAllUsers.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.isError = false;
+        state.users = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(findAllUsers.rejected, (state) => {
+        state.isSuccess = false;
         state.isLoading = false;
         state.isError = true;
       });

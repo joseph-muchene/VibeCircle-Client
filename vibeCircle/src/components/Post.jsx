@@ -1,9 +1,9 @@
 import React from "react";
-import Soon from "../pc.jpg";
 function Friend() {
   return (
+
+    
     <div className="max-w-sm rounded overflow-hidden shadow-lg ">
-      <img src={Soon} className=" w-full " alt="" srcset="" />
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2"> The coldest sunset</div>
         <p className="text-gray-700 text-base">

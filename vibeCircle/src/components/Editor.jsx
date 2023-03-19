@@ -1,31 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "./CreatePost.css";
+import Navbar from "../core/Navbar";
 
-import { Editor, EditorState } from "draft-js";
+const CreatePost = () => {
+  const [content, setContent] = useState("");
 
-function Edit() {
-  // const [editorState, setEditorState] = React.useState(
-  //   EditorState.createEmpty()
-  // );
+  const handleContentChange = (value) => {
+    setContent(value);
+  };
 
-  // const editor = React.useRef(null);
-
-  // function focusEditor() {
-  //   editor.current.focus();
-  // }
-
-  // React.useEffect(() => {
-  //   focusEditor();
-  // }, []);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(content); // Do something with the post content
+  };
 
   return (
-    <div onClick={focusEditor}>
-      {/* <Editor
-        ref={editor}
-        editorState={editorState}
-        onChange={(editorState) => setEditorState(editorState)}
-      /> */}
-    </div>
+    <>
+      <Navbar />
+      <form
+        onSubmit={handleSubmit}
+        className="create-post md:flex justify-center items-center flex-col"
+      >
+        <h2>Create a New Post</h2>
+        <ReactQuill
+          value={content}
+          onChange={handleContentChange}
+          placeholder="Write something amazing..."
+        />
+        <button type="submit">Create Post</button>
+      </form>
+    </>
   );
-}
+};
 
-export default Edit;
+export default CreatePost;

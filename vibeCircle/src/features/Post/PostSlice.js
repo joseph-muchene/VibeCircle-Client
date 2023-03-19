@@ -64,6 +64,17 @@ export const deletePost = createAsyncThunk(
   }
 );
 
+export const createComment = createAsyncThunk(
+  "/post/create/comment",
+  async (payload, thunkAPI) => {
+    try {
+      return PostService.createComment(payload);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const likePost = createAsyncThunk("/post/like", async (id, thunkAPI) => {
   try {
     return PostService.likePost(id);
@@ -80,7 +91,7 @@ export const postSlice = createSlice({
       ...state,
     }),
     search: (state, action) => {
-      console.log(action.payload);
+  
       state.posts = state.posts.filter(
         (post) => post._id == action.payload._id
       );
@@ -175,22 +186,44 @@ export const postSlice = createSlice({
         state.isSuccess = true;
         state.singlePost = action.payload.result[0];
         state.isError = false;
-        const userId = localStorage.getItem("auth");
-        console.log(userId);
-        const c = state.posts.map((post) => {
-          if (post._id === action.payload.postId) {
-            return { ...post, likes: [...post.likes, JSON.parse(userId)._id] };
-          }
-        });
-        console.log(c);
-        c.push(action.payload.result[0]);
-
-        state.posts = c;
+        state.posts = state.posts.map((post) =>
+          post._id === action.payload.postId
+            ? {
+                ...post,
+                likes: action.payload.result.find(
+                  (post) => post._id === action.payload.postId
+                ).likes,
+              }
+            : post
+        );
       })
       .addCase(likePost.rejected, (state) => {
         state.isError = true;
         state.isSuccess = false;
         state.message = "liking post was denied";
+        state.loading = false;
+      })
+      .addCase(createComment.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createComment.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isSuccess = true;
+        state.loading = false;
+        state.posts = state.posts.map((post) =>
+          post._id === action.payload._id
+            ? {
+                ...post,
+                comments: action.payload.comments,
+              }
+            : post
+        );
+        state.message = "comment was created";
+      })
+      .addCase(createComment.rejected, (state) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = "commenting post was denied";
         state.loading = false;
       });
   },

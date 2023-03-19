@@ -1,28 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { createComment } from "../features/Post/PostSlice";
+function Comments({ postId, comments }) {
+  const dispatch = useDispatch();
 
-function Comments() {
+  const [text, setText] = useState("");
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (text === "" || text.length < 3) {
+      if (text.length < 3) {
+        return alert("comment is too short");
+      } else {
+        return alert("text cannot be empty");
+      }
+    }
+    const data = {
+      postId,
+      text,
+    };
+    try {
+      dispatch(createComment(data));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div>
-      <div>
-        <h1>Joseph</h1>
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sint,
-          tempora aspernatur illum voluptatem perferendis earum ipsam,
-          architecto quisquam sunt, incidunt error corrupti! Corrupti vel
-          voluptas iusto autem fugiat beatae nihil?
-        </p>
-      </div>
+      {comments.map((comment) => {
+        return (
+          <div>
+            <h1></h1>
+            <p>{comment?.text}</p>
+          </div>
+        );
+      })}
 
       <div className="p-4">
-        <form className="flex flex-col my-8">
+        <form className="flex flex-col my-8" onSubmit={onSubmit}>
           <textarea
-            name=""
-            id=""
+            name="text"
+            id="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
             cols="20"
             rows="4"
             className="border"
           ></textarea>
-          <button className="border-black mt-3 ">submit</button>
+          <button type="submit" className="border-black mt-3 ">
+            submit
+          </button>
         </form>
       </div>
     </div>

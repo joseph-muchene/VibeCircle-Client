@@ -13,6 +13,7 @@ function Cards() {
   return (
     <div className="relative">
       <Suggestion />
+
       <div className="mx-10 flex justify-center flex-col items-center">
         {posts &&
           posts.length > 0 &&

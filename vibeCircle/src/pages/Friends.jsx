@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Friend from "../components/Friend";
 import Navbar from "../core/Navbar";
+import { useDispatch, useSelector } from "react-redux";
+import { findAllUsers } from "../features/Auth/AuthSlice";
 
 function Friends({ hideNav }) {
+  const { users } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(findAllUsers());
+  }, []);
   return (
     <>
       {!hideNav && <Navbar />}
@@ -22,15 +29,9 @@ function Friends({ hideNav }) {
               </tr>
             </thead>
             <tbody>
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
+              {users.map((user) => {
+                return <Friend user={user} />;
+              })}
             </tbody>
           </table>
         </div>

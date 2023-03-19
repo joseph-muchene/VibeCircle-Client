@@ -92,6 +92,25 @@ const likePost = async (payload) => {
   }
 };
 
+const createComment = async ({ postId, text }) => {
+  try {
+    const config = {
+      headers: {
+        token: `bearer ${tokenFromStorage}`,
+      },
+    };
+    const response = await axios.put(
+      API_URL + "/comment/" + postId,
+      { text: text },
+      config
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export default {
   getPosts,
   getPostById,
@@ -99,4 +118,5 @@ export default {
   updatePost,
   createPost,
   likePost,
+  createComment,
 };

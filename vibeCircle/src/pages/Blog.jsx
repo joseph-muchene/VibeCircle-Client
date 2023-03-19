@@ -1,8 +1,9 @@
-import React from "react";
-import Friend from "../components/Post";
+import React, { useEffect } from "react";
+import Post from "../components/Post";
 import Navbar from "../core/Navbar";
 import SearchPost from "../components/SearchPost";
-function Friends() {
+function Article() {
+  useEffect(() => {}, []);
   return (
     <div>
       <Navbar />
@@ -10,13 +11,13 @@ function Friends() {
         <SearchPost />
       </div>
       <div className=" mx-10 flex flex-col justify-center items-center space-y-4 md:grid grid-cols-3 ">
-        <Friend />
-        <Friend />
-        <Friend />
-        <Friend />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
       </div>
     </div>
   );
 }
 
-export default Friends;
+export default Article;

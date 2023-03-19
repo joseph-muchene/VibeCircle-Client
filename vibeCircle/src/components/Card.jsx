@@ -8,12 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { findAllPosts, likePost } from "../features/Post/PostSlice";
 function Card({ post }) {
   const { user } = useSelector((state) => state.user);
-  const { posts, singlePost } = useSelector((state) => state.post);
   const [toggle, setToggle] = useState(false);
   const [name, setName] = useState("");
-  const [userPost, setUserPost] = useState(
-    posts.find((p) => p._id === post._id)
-  );
 
   // get user name
   const getUserName = async () => {
@@ -30,18 +26,16 @@ function Card({ post }) {
 
   useEffect(() => {
     getUserName();
-  }, [userPost?.userId]);
+  }, [post?.userId]);
   const [like, setLike] = useState(1);
 
   const dispatch = useDispatch();
   const incrementLike = ({ _id }) => {
     const payload = {
       userId: _id,
-      postId: userPost._id,
+      postId: post._id,
     };
     dispatch(likePost(payload));
-   
-    
 
     setLike(like + 1);
   };
@@ -56,7 +50,7 @@ function Card({ post }) {
       <div>
         <div className="border shadow-md flex justify-center flex-col items-center space-y-2">
           <h1>{name}</h1>
-          <p>{userPost.desc}</p>
+          <p>{post.desc}</p>
         </div>
         <div className="">
           <img src={Soon} className=" w-full" alt="" srcset="" />
@@ -65,11 +59,11 @@ function Card({ post }) {
         <div>
           <h1 className="flex justify-center mt-3">
             <p className="text-center w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500">
-              {userPost.likes?.length}
+              {post.likes?.length}
             </p>
           </h1>
           <div className="flex space-x-4 justify-center my-3">
-            {userPost.likes?.length > 0 ? (
+            {post?.likes?.length > 0 ? (
               <button
                 onClick={() => incrementLike(user)}
                 className="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:outline-none rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
@@ -88,10 +82,13 @@ function Card({ post }) {
         </div>
       </div>
 
-      <p className="my-4 font-semibold" onClick={() => setToggle(!toggle)}>
-        Show comments
+      <p
+        className="my-4 font-semibold cursor-pointer"
+        onClick={() => setToggle(!toggle)}
+      >
+        {!toggle ? "show comments" : "hide comments"}
       </p>
-      {toggle && <Comments />}
+      {toggle && <Comments comments={post?.comments} postId={post._id} />}
     </div>
   );
 }

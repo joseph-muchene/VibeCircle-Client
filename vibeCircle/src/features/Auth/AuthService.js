@@ -3,7 +3,6 @@ import axios from "axios";
 const API_URL = "http://localhost:8000/api/v1/user";
 
 const registerUser = async (payload) => {
-
   try {
     const user = await axios.post(API_URL + "/create", payload);
     const { name, email, _id, isAdmin } = user.data;
@@ -41,7 +40,6 @@ const getUserById = async (_id) => {
   try {
     const response = await axios.get(API_URL + "/find/" + `${_id}`);
 
-
     return response.data;
   } catch (error) {
     console.log(error.message);
@@ -69,11 +67,23 @@ const updateUser = async (payload) => {
     console.log(error.message);
   }
 };
+
+const findAllUsers = async () => {
+  try {
+    const response = await axios.get(API_URL + "/find/");
+
+    return response.data;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 const userServiceData = {
   registerUser,
   SignInUser,
   getUserById,
   updateUser,
+  findAllUsers,
 };
 
 export default userServiceData;

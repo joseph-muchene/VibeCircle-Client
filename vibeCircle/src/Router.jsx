@@ -17,10 +17,10 @@ import Account from "./pages/Account";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserById } from "./features/Auth/AuthSlice";
 import Navbar from "./core/Navbar";
+import CreatePost from "./components/Editor";
 
 function Router() {
   // const navigate = useNavigate();
-  const { user, authenticated } = useSelector((state) => state.user);
   const userFromLocalStorage = JSON.parse(localStorage.getItem("auth"));
   const dispatch = useDispatch();
 
@@ -53,6 +53,7 @@ function Router() {
           <Route element={<Login />} path="/login" />
           <Route element={<Account />} path="/account" />
           <Route element={<Settings />} path="/settings" />
+          <Route element={<CreatePost />} path="/post/new" />
           <Route element={<Friends />} path="/friends" />
           <Route element={hello()} path="*" />
         </Routes>
