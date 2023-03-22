@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/v1/post";
+const API_URL = "http://localhost:8000/api/v1";
 const tokenFromStorage = JSON.parse(localStorage.getItem("token"));
 
-const getPosts = async () => {
+const getArticles = async (page) => {
   try {
-    const response = await axios.get(API_URL + "/find/all");
+    const response = await axios.get(
+      API_URL + "/articles" + "?" + "page=" + `${page}`
+    );
 
     return response.data;
   } catch (error) {
@@ -13,15 +15,18 @@ const getPosts = async () => {
   }
 };
 
-const createPost = async (payload) => {
+const createArticle = async (payload) => {
   const config = {
     headers: {
       token: `bearer ${tokenFromStorage}`,
     },
   };
-  console.log(payload);
   try {
-    const response = await axios.post(API_URL + "/create", payload, config);
+    const response = await axios.post(
+      API_URL + "/article/create",
+      { content: payload },
+      config
+    );
 
     return response.data;
   } catch (error) {
@@ -29,9 +34,9 @@ const createPost = async (payload) => {
   }
 };
 
-const getPostById = async (id) => {
+const getArticleById = async (id) => {
   try {
-    const response = await axios.get(API_URL + "/read/" + id);
+    const response = await axios.get(API_URL + "/article/" + id);
 
     return response.data;
   } catch (error) {
@@ -39,14 +44,17 @@ const getPostById = async (id) => {
   }
 };
 
-const deletePost = async (id) => {
+const deleteArticle = async (id) => {
   const config = {
     headers: {
       token: `bearer ${tokenFromStorage}`,
     },
   };
   try {
-    const response = await axios.get(API_URL + "/delete/" + id, config);
+    const response = await axios.delete(
+      API_URL + "/article/remove/" + id,
+      config
+    );
 
     return response.data;
   } catch (error) {
@@ -54,15 +62,15 @@ const deletePost = async (id) => {
   }
 };
 
-const updatePost = async (payload) => {
+const updateArticle = async (payload) => {
   try {
     const config = {
       headers: {
         token: `bearer ${tokenFromStorage}`,
       },
     };
-    const response = await axios.get(
-      API_URL + "/update/" + payload.id,
+    const response = await axios.put(
+      API_URL + "/article/update/" + payload.id,
       payload.data,
       config
     );
@@ -73,7 +81,7 @@ const updatePost = async (payload) => {
   }
 };
 
-const likePost = async (payload) => {
+const likeArticle = async (payload) => {
   const tokenFromStorage = JSON.parse(localStorage.getItem("token"));
   try {
     const config = {
@@ -82,7 +90,7 @@ const likePost = async (payload) => {
       },
     };
     const response = await axios.put(
-      API_URL + "/like/" + payload.postId,
+      API_URL + "/like/" + payload.ArticleId,
       undefined,
       config
     );
@@ -93,7 +101,7 @@ const likePost = async (payload) => {
   }
 };
 
-const createComment = async ({ postId, text }) => {
+const createComment = async ({ ArticleId, text }) => {
   try {
     const config = {
       headers: {
@@ -101,7 +109,7 @@ const createComment = async ({ postId, text }) => {
       },
     };
     const response = await axios.put(
-      API_URL + "/comment/" + postId,
+      API_URL + "/comment/" + ArticleId,
       { text: text },
       config
     );
@@ -113,11 +121,11 @@ const createComment = async ({ postId, text }) => {
 };
 
 export default {
-  getPosts,
-  getPostById,
-  deletePost,
-  updatePost,
-  createPost,
-  likePost,
+  getArticles,
+  getArticleById,
+  deleteArticle,
+  updateArticle,
+  createArticle,
+  likeArticle,
   createComment,
 };

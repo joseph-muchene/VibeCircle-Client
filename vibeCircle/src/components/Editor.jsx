@@ -3,6 +3,8 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./CreatePost.css";
 import Navbar from "../core/Navbar";
+import { useDispatch } from "react-redux";
+import { createarticles } from "../features/Articles/ArticleSlice";
 
 const CreatePost = () => {
   const [content, setContent] = useState("");
@@ -10,10 +12,14 @@ const CreatePost = () => {
   const handleContentChange = (value) => {
     setContent(value);
   };
-
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(content); // Do something with the post content
+    try {
+      dispatch(createarticles(content));
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -29,6 +35,7 @@ const CreatePost = () => {
           onChange={handleContentChange}
           placeholder="Write something amazing..."
         />
+
         <button type="submit">Create Post</button>
       </form>
     </>

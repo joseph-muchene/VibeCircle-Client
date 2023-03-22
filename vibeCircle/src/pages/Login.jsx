@@ -9,26 +9,27 @@ function Login() {
   const { authenticated, user, isSuccess, isError } = useSelector(
     (state) => state.user
   );
-  console.log(isSuccess);
+
   const dispatch = useDispatch();
 
   const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     dispatch(getUserById(userFromLocalStorage?._id));
-  }, [userFromLocalStorage?._id]);
+  }, []);
 
   const [password, setPasword] = useState("");
   const [Email, setEmail] = useState(userFromLocalStorage?.email);
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
+
     try {
       const payload = {
         email: Email,
         password,
       };
-      if (user !== null && authenticated && isSuccess && !isError) {
+      if (password !== "" && Email !== "") {
         console.log("executed");
 
         dispatch(SignInUser(payload));

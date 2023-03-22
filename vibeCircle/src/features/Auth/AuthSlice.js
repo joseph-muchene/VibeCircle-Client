@@ -108,11 +108,9 @@ export const userSlice = createSlice({
       })
       .addCase(SignInUser.pending, (state) => {
         state.isLoading = true;
-        state.user = null;
-        state.isSuccess = false;
-        state.isError = true;
       })
       .addCase(SignInUser.fulfilled, (state, action) => {
+        console.log(action.payload);
         state.message = "login successful";
         state.isLoading = false;
         state.token = action.payload.token;
@@ -129,9 +127,8 @@ export const userSlice = createSlice({
       .addCase(SignInUser.rejected, (state) => {
         state.isError = true;
         state.message = "user failed to login";
-        () => ({
-          ...AuthState,
-        });
+        state.isSuccess = false;
+        state.isLoading = false;
       })
       .addCase(getUserById.pending, (state) => {
         state.isLoading = true;
@@ -151,6 +148,7 @@ export const userSlice = createSlice({
         state.message = "An error has occured, try sign in again";
         state.isLoading = false;
         state.isError = true;
+        console.log("stopped loading");
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;

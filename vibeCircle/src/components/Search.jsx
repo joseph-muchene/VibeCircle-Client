@@ -8,7 +8,7 @@ function Search() {
 
   useEffect(() => {
     for (let i = 0; i < posts.length; i++) {
-      if (posts[i].desc.includes(searchValue)) {
+      if (posts[i].desc?.includes(searchValue)) {
         dispatch(search(posts[i]));
       }
     }
